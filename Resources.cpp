@@ -1,6 +1,6 @@
 #include "Resources.h"
 
-using namespace std;
+
 
 int Resources::resources_counter = 0; // static
 

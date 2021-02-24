@@ -3,12 +3,6 @@
 
 #include "Employee.h"
 
-/*
-   White_collar is an abstract class, because
-   it will be inherited by more classes like Trader, Engineer etc
- */
-
-// abstract class
 class White_collar : public Employee
 {
 protected:

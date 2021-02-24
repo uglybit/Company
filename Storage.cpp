@@ -1,6 +1,6 @@
 #include "Storage.h"
 
-using namespace std;
+
 
 Storage::~Storage() // frees memory
 {
@@ -22,14 +22,14 @@ void Storage::show_menu()
     do
     {
         //system("cls");
-        cout << "\n--> STORAGE\n\n"
+        std::cout << "\n--> STORAGE\n\n"
              << " d - Show devices\n"
              << " t - Show tools\n"
              << " v - Add device\n"
              << " o - Add tool\n"
              << " m.   Main menu\n";
 
-        cin >> choice;
+        std::cin >> choice;
          switch(choice)
          {
             case 'd': show_devices();
@@ -39,7 +39,7 @@ void Storage::show_menu()
             case 'v': add_new_device(); break;
             case 'o': add_new_tool(); break;
             case 'm': /*system("cls");*/ quit = true; break; // to main Menu
-            default: cout << "Wrong commmand, try again" << endl;
+            default: std::cout << "Wrong commmand, try again" << '\n';
          }
     }while(!quit);
 }
@@ -49,13 +49,13 @@ void Storage::show_menu()
 unsigned Storage::show_devices()
 {
     unsigned quantity = devices_in_storage.size();
-    cout << endl << string(60 , '-') << endl;
+    std::cout << '\n' << string(60 , '-') << '\n';
 
     for (unsigned i = 0; i < quantity; i++)
     {
-        cout << i + 1 << ". ";
+        std::cout << i + 1 << ". ";
         devices_in_storage[i]->show_info();
-        cout << string(60 , '-') << endl;
+        std::cout << string(60 , '-') << '\n';
     }
 
     return quantity;
@@ -66,13 +66,13 @@ unsigned Storage::show_devices()
 unsigned Storage::show_tools()
 {
     unsigned quantity = tools_in_storage.size();
-    cout << endl << string(80 , '-') << endl;
+    std::cout << '\n' << string(80 , '-') << '\n';
 
     for (unsigned i = 0; i < quantity; i++)
     {
-        cout << i + 1 << ". ";
+        std::cout << i + 1 << ". ";
         tools_in_storage[i]->show_info();
-        cout << string(80 , '-') << endl;
+        std::cout << string(80 , '-') << '\n';
     }
 
     return quantity;
@@ -86,7 +86,7 @@ void Storage::save_all_resources()
     std::ofstream f_out(data_file_name);
     if(!f_out)
     {
-        cout << "Can not open file " << data_file_name << endl;
+        std::cout << "Can not open file " << data_file_name << '\n';
         return;
     }
 
@@ -104,7 +104,7 @@ void Storage::save_all_resources()
             tools_in_storage[i]->save_resource(f_out);
     }
 
-    if (f_out) cout << "Storage database has been saved properly\n";
+    if (f_out) std::cout << "Storage database has been saved properly\n";
     f_out.close();
 }
 
@@ -119,39 +119,39 @@ void Storage::read_all_resources()
 
     if(!f_in)
     {
-        cout << "Can not open file " << data_file_name << endl;
+        std::cout << "Can not open file " << data_file_name << '\n';
         return;
     }
 
     // reading devices
     f_in >> size_devices;
-    //cout << "Size devices: " << size_devices << endl; // TEST
+    //std::cout << "Size devices: " << size_devices << '\n'; // TEST
 
     for (unsigned i = 0; i < size_devices; i++) 
     {
         devices_in_storage.push_back(new Device);
-       // std::cout << "Address Storage::new Device: " << devices_in_storage.back() << std::endl; // TEST
+       // std::cout << "Address Storage::new Device: " << devices_in_storage.back() << '\n'; // TEST
         devices_in_storage.back()->read_from_file(f_in);
     }
-    //cout << "Size of devices vector: " << devices_in_storage.size() << endl; // TEST
+    //std::cout << "Size of devices vector: " << devices_in_storage.size() << '\n'; // TEST
 
     //reading tools
     f_in >> size_tools;
-    cout << "Size tools: " << size_tools << endl;
+    std::cout << "Size tools: " << size_tools << '\n';
 
     for (unsigned i = 0; i < size_tools; i++) 
     {
         tools_in_storage.push_back(new Tool);
-        //std::cout << "Address Storage::new Tool: " << tools_in_storage.back() << std::endl; // TEST
+        //std::cout << "Address Storage::new Tool: " << tools_in_storage.back() << '\n'; // TEST
         tools_in_storage.back()->read_from_file(f_in);
     }
 
-    //cout << "Size of tools vector: " << tools_in_storage.size() << endl; // TEST
+    //std::cout << "Size of tools vector: " << tools_in_storage.size() << '\n'; // TEST
 
     if (f_in)
-        cout << "Storage database has been read properly\n";
+        std::cout << "Storage database has been read properly\n";
     else
-        cout << "Error while reading storage database.\n";
+        std::cout << "Error while reading storage database.\n";
     f_in.close();
 }
 
@@ -159,13 +159,13 @@ void Storage::read_all_resources()
 // transfer device from storage to White collar worker
 Resources* Storage::lease_device(unsigned nr) 
 {
-    //cout << "Devices in storage size:" << devices_in_storage.size() << endl;
+    //std::cout << "Devices in storage size:" << devices_in_storage.size() << '\n';
     if ((nr < 0) || (nr >= devices_in_storage.size() ) ) {
-        //cout <<"First nullptr w lease device\m";
+        //std::cout <<"First nullptr w lease device\m";
         return nullptr;
     }
 
-    cout << "Save changes?";
+    std::cout << "Save changes?";
     if (confirmation() )
         save_all_resources();
     else
@@ -186,7 +186,7 @@ Resources* Storage::lease_tool(unsigned nr)
     if ( (nr < 0) || (nr >= tools_in_storage.size()) )
         return nullptr;
 
-    cout << "Save changes?";
+    std::cout << "Save changes?";
     if (confirmation() )
         save_all_resources();
     else
@@ -222,24 +222,24 @@ bool Storage::take_resource(Resources* tmp)
 void Storage::add_new_device()
 {
     // system("cls");
-    cout << "\n--> ADD DEVICE TO STORAGE\n";
+    std::cout << "\n--> ADD DEVICE TO STORAGE\n";
     string name;
     string brand;
     unsigned quantity;
-    cout << "Device name: ";
-    cin >> name;
-    cout << "Brand: ";
-    cin >> brand;
-    cout << "Quantity: ";
-    cin >> quantity;
+    std::cout << "Device name: ";
+    std::cin >> name;
+    std::cout << "Brand: ";
+    std::cin >> brand;
+    std::cout << "Quantity: ";
+    std::cin >> quantity;
 
     for (unsigned i = 0; i < quantity; i++)
     {
         devices_in_storage.push_back(new Device(name, brand));
-        std::cout << "Adres Storage::Add new Device: " << devices_in_storage.back() << std::endl;
+        std::cout << "Adres Storage::Add new Device: " << devices_in_storage.back() << '\n';
     }
 
-    cout << "Do you want to save changes? \n";
+    std::cout << "Do you want to save changes? \n";
     if (confirmation())
         save_all_resources();
 }
@@ -249,24 +249,24 @@ void Storage::add_new_device()
 void Storage::add_new_tool() 
 {
    // system("cls");
-    cout << "\n--> ADD TOOL TO STORAGE\n";
+    std::cout << "\n--> ADD TOOL TO STORAGE\n";
     string name;
     double price;
     unsigned quantity;
-    cout << "Tool name: ";
-    cin >> name;
-    cout << "Price: ";
-    cin >> price;
-    cout << "Quantity: ";
-    cin >> quantity;
+    std::cout << "Tool name: ";
+    std::cin >> name;
+    std::cout << "Price: ";
+    std::cin >> price;
+    std::cout << "Quantity: ";
+    std::cin >> quantity;
 
     for (unsigned i = 0; i < quantity; i++)
     {
         tools_in_storage.push_back(new Tool(name, price));
-        std::cout << "Adres Storage::new tool: " << tools_in_storage.back() << std::endl;
+        std::cout << "Adres Storage::new tool: " << tools_in_storage.back() << '\n';
     }
 
-    cout << "Do you want to save changes? \n";
+    std::cout << "Do you want to save changes? \n";
     if ( confirmation() )
         save_all_resources();
 }

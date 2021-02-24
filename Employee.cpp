@@ -1,6 +1,6 @@
 #include "Employee.h"
 
-using namespace std;
+
 
 int Employee::employee_counter = 0; // static
 int Employee::max_id_amount = 0; // static
@@ -15,14 +15,14 @@ Employee::Employee()
 
 Employee::Employee(string p) : position{ p }
 {
-    cout << "New employee from file: " << this << endl;
+    std::cout << "New employee from file: " << this << '\n';
     ++employee_counter;
 } // for reading from file only
 
 
 Employee::~Employee() 
 {
-    cout << "destructor Employee\n"; employee_counter--; 
+    std::cout << "destructor Employee\n"; employee_counter--; 
     for (auto a : employee_resources) {
         if (a != nullptr)
             delete a; // frees memory
@@ -32,17 +32,17 @@ Employee::~Employee()
 
 int Employee::show_employee_resources() 
 {   
-    cout << "\nEmployee's resources: \n";
+    std::cout << "\nEmployee's resources: \n";
     unsigned n = employee_resources.size();
 
-    if (n == 0) cout << "\t<empty>\n"; // employee has no resources
+    if (n == 0) std::cout << "\t<empty>\n"; // employee has no resources
 
     for (unsigned i = 0; i < n; i++)
     {
-        cout << "\t" << i + 1 << ". ";
+        std::cout << "\t" << i + 1 << ". ";
         employee_resources[i]->show_info(); // virtual
     }
-    cout << string(100, '-') << endl;
+    std::cout << string(100, '-') << '\n';
 
     return employee_resources.size();
 }
@@ -55,12 +55,12 @@ void Employee::return_resource(Storage* s)
     if (quantity <= 0) {
         return;
     }
-    cout << "Choose number: ";
+    std::cout << "Choose number: ";
 
     int number;
     do // number validation
     {
-        cin >> number;
+        std::cin >> number;
         number -= 1;
         if (number >= 0 && number <= quantity)
             break;
@@ -88,7 +88,7 @@ bool Employee::get_resource(Storage* s)
     switch (this->recType())
     {
     case Emp_type::Employee:
-        cout << "Uncorrect Employee type!";
+        std::cout << "Uncorrect Employee type!";
         return false;
     case Emp_type::Trader:
         quantity = s->show_devices(); break;
@@ -99,10 +99,10 @@ bool Employee::get_resource(Storage* s)
     if (quantity <= 0) { // if storage is empty
         return false;
     }
-    cout << "Choose number";
+    std::cout << "Choose number";
 
     do {
-        cin >> number; // validation!!
+        std::cin >> number; // validation!!
         number -= 1;
         if (number >= 0 && number <= quantity) break;
     } while (true);
@@ -112,7 +112,7 @@ bool Employee::get_resource(Storage* s)
     switch (this->recType()) // checking type of employee
     {
     case Emp_type::Employee:
-        cout << "Error - wrong type of Employee";
+        std::cout << "Error - wrong type of Employee";
         return false;
     case Emp_type::Trader:
         tmp = s->lease_device(number); break;
@@ -141,21 +141,21 @@ void Employee::edit_personal_info()
         string edition[7] = {
              "Name","Surname", "Birthday", "Join date", "Addres", "Phone", "Salary" };
 
-        cout << "Edit:";
+        std::cout << "Edit:";
         for (int i = 0; i < 7; i++){ // shows records that can be changed
-            cout << "\n\t" << i + 1 << ". " << edition[i];
+            std::cout << "\n\t" << i + 1 << ". " << edition[i];
         }
-        cout << "\n\t0. Return" << "\nChoice: ";
+        std::cout << "\n\t0. Return" << "\nChoice: ";
 
         int choice; // validation !!
-        cin >> choice;
+        std::cin >> choice;
         int n = choice -1;
         if ( n > 6 || n < 0 )  break; // the number must be 0<= n >=6
-        cout << edition[n] << " edition: "; //
-        cin >> ws;
-        getline(cin, edition[n], '\n'); // writing change record temporary in table
+        std::cout << edition[n] << " edition: "; //
+        std::cin >> std::ws;
+        getline(std::cin, edition[n], '\n'); // writing change record temporary in table
 
-        cout << "\nSave changes?\n";
+        std::cout << "\nSave changes?\n";
         if ( !confirmation())
             return;
 
@@ -177,16 +177,16 @@ void Employee::edit_personal_info()
 
 void Employee::fill_employee_data()
 {
-    cout << "Name: ";        cin >> ws;
-                             getline(cin, name,      '\n');
-    cout << "Surname: ";     getline(cin, surname,   '\n');
-    cout << "birthday: ";    getline(cin, birthday,  '\n');
-    cout << "join_date: ";   getline(cin, join_date, '\n');
-    cout << "address: ";     getline(cin, address,   '\n');
-    cout << "phone: ";       getline(cin, phone,     '\n');
-    cout << "salary: ";
+    std::cout << "Name: ";        std::cin >> std::ws;
+                             getline(std::cin, name,      '\n');
+    std::cout << "Surname: ";     getline(std::cin, surname,   '\n');
+    std::cout << "birthday: ";    getline(std::cin, birthday,  '\n');
+    std::cout << "join_date: ";   getline(std::cin, join_date, '\n');
+    std::cout << "address: ";     getline(std::cin, address,   '\n');
+    std::cout << "phone: ";       getline(std::cin, phone,     '\n');
+    std::cout << "salary: ";
     do {                // data validaion - salary is an integer
-        cin >> salary;
+        std::cin >> salary;
         if (data_validation("Wrong data! Try again: "))
             continue;
         else
@@ -199,18 +199,18 @@ void Employee::fill_employee_data()
 
 void Employee::show_personal_info()
 {
-    cout << string(100, '-') << endl;
-    cout << "ID: "            << employee_id
+    std::cout << string(100, '-') << '\n';
+    std::cout << "ID: "            << employee_id
          << ". "              << name
          << " "               << surname
          << " position: "     << position
-         << ", since: "       << join_date << fixed << cout.precision(2)
+         << ", since: "       << join_date << std::fixed << std::cout.precision(2)
          << " salary: "       << salary
          << "\n\tBorn: "      << birthday
          << " phone: "        << phone
          << " address: "      << address;
-    cout << get_additional_options();
-    cout << endl;
+    std::cout << get_additional_options();
+    std::cout << '\n';
 
 }
 
@@ -234,7 +234,7 @@ void Employee::copy_basic_info(Employee* o)
 void Employee::read_basic_info(std::ifstream& f_in) 
 {
     f_in >> employee_id;
-    f_in >> ws;
+    f_in >> std::ws;
     getline(f_in, name,      '#');
     getline(f_in, surname,   '#');
     getline(f_in, birthday,  '#');

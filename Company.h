@@ -19,7 +19,7 @@ class Company
     Storage* storage = nullptr;
     string file_employee = "employee_data.txt"; // constant file name
     std::vector<Employee*> all_workers; // container for employees
-    int current_employee; // the number of employee we currently are working on
+    int current_employee; // the number of employee, currently are working on
     using  iterator = std::vector<Employee*>::iterator; 
 
     iterator it_curr_emp(); // returns iterator for current employee

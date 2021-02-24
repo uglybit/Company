@@ -1,6 +1,6 @@
 #include "Blue_collar.h"
 
-using namespace std;
+
 
 // read Production worker form file
 void Production_worker::save_employee(std::ofstream& f_out)
@@ -16,7 +16,7 @@ void Production_worker::save_employee(std::ofstream& f_out)
 // save Production worker to file
 void Production_worker::read_employee(std::ifstream& f_in) // virtual
 {
-    //cout << "\nProduction_worker read_employee\n";
+    //std::cout << "\nProduction_worker read_employee\n";
     read_basic_info(f_in);
     f_in >> brigade;
     f_in >> nof_employee_tools;
@@ -24,7 +24,7 @@ void Production_worker::read_employee(std::ifstream& f_in) // virtual
     for (int i = 0; i < nof_employee_tools; i++)
     {
         employee_resources.push_back(new Tool);
-        cout << "New Tool z read employee: " << employee_resources.back() << endl;
+        std::cout << "New Tool z read employee: " << employee_resources.back() << '\n';
         employee_resources[i]->read_from_file(f_in); // virtual
     }
 }
@@ -32,14 +32,14 @@ void Production_worker::read_employee(std::ifstream& f_in) // virtual
 
 string Production_worker::get_additional_options() // virtual
 {
-    cout << " brigade: ";
+    std::cout << " brigade: ";
     return brigade;
 }
 
 
 void Production_worker::set_additional_options() // virtual
 {
-    cout << "Brigade number: ";
-    cin >> brigade; // validation!!
+    std::cout << "Brigade number: ";
+    std::cin >> brigade; // validation!!
 }
 

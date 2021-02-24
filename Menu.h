@@ -15,7 +15,7 @@ class Menu
 public:
     Menu(Company* c) : company{c}
     {
-        company->read_from_file(); // reading from automaticaly
+        company->read_from_file(); // reading from file automaticaly
     }
     
     void show_menu();

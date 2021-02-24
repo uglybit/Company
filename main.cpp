@@ -5,26 +5,21 @@
 #include <conio.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <crtdbg.h>
 
 
-using namespace std;
+
 
 int main()
 {
+    Company my_company;
+    Menu menu(&my_company);
+    do
     {
-        Company my_company;
-        Menu menu(&my_company);
-        do
-        {
-            menu.show_menu();
+        menu.show_menu();
 
-        } while (menu.menu_choice() != 'e');
+    } while (menu.menu_choice() != 'e');
 
-       getchar();
-    }
-
-    _CrtDumpMemoryLeaks();
+    getchar();
     return 0;
 }
 
@@ -32,10 +27,10 @@ int main()
 // to making possible for user to see result of operations
 void require_key(char key)
 {
-    cout << "\n " << key << " - go back... \n";
+    std::cout << "\n " << key << " - go back... \n";
     char ch;
     do {
-        cin >> ch;
+        std::cin >> ch;
     } while (ch != 'b');
 }
 
@@ -43,7 +38,7 @@ void require_key(char key)
 // confirmation when overwriting important data 
 bool confirmation()
 {
-    cout << "y - yes\n" 
+    std::cout << "y - yes\n" 
          << "n - no\n";
     char c;
     do
@@ -59,11 +54,11 @@ bool confirmation()
 // any number validation 
 bool data_validation(string info)
 {
-    if (cin.fail())
+    if (std::cin.fail())
     {
-        cin.clear();
-        cin.ignore(10, '\n');
-        cout << info;
+        std::cin.clear();
+        std::cin.ignore(10, '\n');
+        std::cout << info;
         require_key();
         return true;
     }
