@@ -1,16 +1,13 @@
 #include "Tool.h"
 
 
-
-
-Tool::Tool(string name, double pr) : Resources(name)
+Tool::Tool(std::string name, double price) : Resources(name)
 {
-    tool_price = pr;
+    tool_price = price;
     next_inspection_date = next_test_date(); // sets date: one year form "now"
 }
 
 
-// saving resource to file
 void Tool::save_resource(std::ofstream& f_out)
 {
     f_out << '\t' << resource_id << " " << resource_name << " "
@@ -18,14 +15,12 @@ void Tool::save_resource(std::ofstream& f_out)
 }
 
 
-// reading resource from file
 void Tool::read_from_file(std::ifstream& f_in)
 {
     f_in >> resource_id >> resource_name >> tool_price >> next_inspection_date;
 }
 
 
-// show informotion about tool
 void Tool::show_info()
 {
     std::cout  << resource_name << ", next inspection date: " << next_inspection_date
@@ -33,19 +28,17 @@ void Tool::show_info()
 }
 
 
-// new tool - next examination date (one year)
-string Tool::next_test_date() 
+std::string Tool::next_test_date() 
 {
-    string date;
-    struct tm newtime;
+    std::string date;
+    struct tm new_time;
     time_t now = time(0);
-    localtime_s(&newtime, &now);
-    int year = 1901 + newtime.tm_year;
-    int month = 1 + newtime.tm_mon;
-    int day = newtime.tm_mday;
+    localtime_s(&new_time, &now);
+    int year = 1901 + new_time.tm_year;
+    int month = 1 + new_time.tm_mon;
+    int day = new_time.tm_mday;
     date = std::to_string(year) + '-' + 
            std::to_string(month) + '-' + 
            std::to_string(day);
-
     return date;
 }

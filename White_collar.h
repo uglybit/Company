@@ -8,21 +8,17 @@ class White_collar : public Employee
 protected:
 
     explicit White_collar() : Employee() { nof_employee_tools = 0; }
-    explicit White_collar(string p) : Employee(p) {} // for reading from file
+    explicit White_collar(std::string p) : Employee(p) {} // for reading from file
     ~White_collar() override {};
 };
 
-/*
-  Class Trader is final class.
-*/
 
-
-class Trader : public White_collar
+class Trader final : public White_collar
 {
 public:
 
     explicit Trader() : White_collar() { position = "trader"; } // for creating new employee by user
-    explicit Trader(string p) : White_collar(p) {} // for reading from file
+    explicit Trader(std::string p) : White_collar(p) {} // for reading from file
     ~Trader() override { std::cout << "destructor Trader\n"; }
 
     Emp_type recType() const override { return Emp_type::Trader; }
@@ -32,6 +28,5 @@ public:
 
     Emp_type Employee_type() const override { return Emp_type::Trader; }
 };
-
 
 #endif

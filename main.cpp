@@ -7,8 +7,6 @@
 #include <stdlib.h>
 
 
-
-
 int main()
 {
     Company my_company;
@@ -19,7 +17,7 @@ int main()
 
     } while (menu.menu_choice() != 'e');
 
-    getchar();
+    std::cin.get();
     return 0;
 }
 
@@ -52,7 +50,7 @@ bool confirmation()
 
 
 // any number validation 
-bool data_validation(string info)
+bool data_validation(std::string info)
 {
     if (std::cin.fail())
     {

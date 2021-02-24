@@ -1,7 +1,6 @@
 #include "Menu.h"
 
 
-
 void Menu::show_menu()
 {
     system("cls");
@@ -18,7 +17,7 @@ void Menu::show_menu()
 char Menu::menu_choice()
 {
     char choice;
-    std::cin >> choice;
+    std::cin >> choice; // add validation
     switch(choice)
     {
         case 'a': company->add_new_employee(); break;

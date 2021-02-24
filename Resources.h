@@ -5,11 +5,8 @@
 #include <iostream>
 #include <string>
 
-
-using std::string;
-
 // global functions - definitions: main.cpp
-bool data_validation(string info);
+bool data_validation(std::string info);
 void require_key(char key = 'b');
 bool confirmation();
 
@@ -22,10 +19,6 @@ enum class Res_type
     Device
 };
 
-/*
-  Resource is an abstract class for all kind tools, devices etc. that company owns
-  Functions allow to: show information, read/save to file. 
-*/
 
 class Resources
 {
@@ -37,7 +30,7 @@ protected:
 public:
     Resources() { resource_id = ++resources_counter; }
     explicit Resources(int n)  { resources_counter += n; }
-    explicit Resources(string name);
+    explicit Resources(std::string name);
     virtual ~Resources() { std::cout << "Destr Resources\n"; resources_counter--; }
 
     //This function allows to recognize type of Resource*  in derived class

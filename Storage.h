@@ -21,7 +21,7 @@ class Storage
 {
     std::vector<Resources*> devices_in_storage;
     std::vector<Resources*> tools_in_storage;
-    string data_file_name = "storage_data.txt";
+    std::string data_file_name = "storage_data.txt";
  
 public:
     Storage() {}

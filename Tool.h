@@ -12,10 +12,10 @@
 class Tool : public Resources
 {
     double tool_price;
-    string next_inspection_date;
+    std::string next_inspection_date;
 public:
     Tool() : Resources() {}
-    explicit Tool(string name, double pr);
+    explicit Tool(std::string name, double price);
     explicit Tool(int n) : Resources(n)  {}
     ~Tool() override { std::cout << "Destruktor Tool " << this << "\n"; }
 
@@ -23,8 +23,7 @@ public:
     void save_resource(std::ofstream& f_out) override;
     void read_from_file(std::ifstream& f_in) override;
     void show_info() override;
-    string next_test_date();
+    std::string next_test_date();
 };
-
 
 #endif // TOOL_H

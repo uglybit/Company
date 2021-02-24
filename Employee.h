@@ -2,13 +2,7 @@
 #define EMPLOYEE_H
 
 #include "Storage.h"
-
 #include <vector>
-
-/*
-  Employee is an abstract class (pure virtual)
-  for all kind of employees in company
-*/
 
 // recgognize Employee type
 enum class Emp_type
@@ -21,13 +15,13 @@ enum class Emp_type
 class Employee // abstract class
 {
 protected:
-    string position;
-    string name;
-    string surname;
-    string birthday;
-    string join_date;
-    string address;
-    string phone;
+    std::string position;
+    std::string name;
+    std::string surname;
+    std::string birthday;
+    std::string join_date;
+    std::string address;
+    std::string phone;
     double salary;
     int employee_id;
 
@@ -40,7 +34,7 @@ public:
     Employee();
     Employee(const Employee &) = delete;
     Employee* operator=(const Employee &) = delete;
-    explicit Employee(string p);  // for reading from file only
+    explicit Employee(std::string p);  // for reading from file only
     virtual ~Employee();
 
     virtual Emp_type recType() const { return Emp_type::Employee; }
@@ -50,7 +44,7 @@ public:
     int get_employee_id() { return employee_id; }
     int get_number_of_itmes() { return nof_employee_tools; }
     static unsigned get_max_id_amount() {return max_id_amount; } 
-    string get_surname() { return surname; } // for searching for employee
+    std::string get_surname() { return surname; } // for searching for employee
     static void set_max_id_amount(int n) { max_id_amount = n; } 
 
     bool get_resource(Storage* s);
@@ -70,7 +64,7 @@ public:
     virtual void read_employee(std::ifstream& f_in) = 0;
 
     /** defined as  Trader! */
-    virtual string get_additional_options() { return " "; };
+    virtual std::string get_additional_options() { return " "; };
     virtual void set_additional_options() {};
     /** */
 

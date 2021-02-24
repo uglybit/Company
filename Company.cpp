@@ -21,7 +21,7 @@ Company::~Company()
 
 void Company::read_from_file()
 {
-    string p;
+    std::string p;
     std::ifstream file_in(file_employee);
     if (!file_in)
     {
@@ -130,7 +130,7 @@ void Company::show_all_employees() // shows only personal info from abstract cla
             a->show_personal_info();
     }
 
-    std::cout << string(100 , '-') << '\n';
+    std::cout << std::string(100 , '-') << '\n';
     require_key();
 }
 
@@ -168,7 +168,7 @@ void Company::find_employee()
 
 bool Company::search_by_surname()
 {
-    string s;
+    std::string s;
     unsigned counter = 0; // counter for persons with the same name
     std::cout << "\nEnter surname: ";
     std::cin >> std::ws; // clearing white spaces

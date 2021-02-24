@@ -49,13 +49,13 @@ void Storage::show_menu()
 unsigned Storage::show_devices()
 {
     unsigned quantity = devices_in_storage.size();
-    std::cout << '\n' << string(60 , '-') << '\n';
+    std::cout << '\n' << std::string(60 , '-') << '\n';
 
     for (unsigned i = 0; i < quantity; i++)
     {
         std::cout << i + 1 << ". ";
         devices_in_storage[i]->show_info();
-        std::cout << string(60 , '-') << '\n';
+        std::cout << std::string(60 , '-') << '\n';
     }
 
     return quantity;
@@ -66,13 +66,13 @@ unsigned Storage::show_devices()
 unsigned Storage::show_tools()
 {
     unsigned quantity = tools_in_storage.size();
-    std::cout << '\n' << string(80 , '-') << '\n';
+    std::cout << '\n' << std::string(80 , '-') << '\n';
 
     for (unsigned i = 0; i < quantity; i++)
     {
         std::cout << i + 1 << ". ";
         tools_in_storage[i]->show_info();
-        std::cout << string(80 , '-') << '\n';
+        std::cout << std::string(80 , '-') << '\n';
     }
 
     return quantity;
@@ -223,8 +223,8 @@ void Storage::add_new_device()
 {
     // system("cls");
     std::cout << "\n--> ADD DEVICE TO STORAGE\n";
-    string name;
-    string brand;
+    std::string name;
+    std::string brand;
     unsigned quantity;
     std::cout << "Device name: ";
     std::cin >> name;
@@ -250,7 +250,7 @@ void Storage::add_new_tool()
 {
    // system("cls");
     std::cout << "\n--> ADD TOOL TO STORAGE\n";
-    string name;
+    std::string name;
     double price;
     unsigned quantity;
     std::cout << "Tool name: ";
