@@ -4,13 +4,12 @@
 void Menu::show_menu()
 {
     system("cls");
-    std::cout << "\n*** MY COMPANY ***\n" << '\n';
-    std::cout << " a - Add employee\n"
+    std::cout << "\n*** MY COMPANY ***\n\n"
+         << " a - Add employee\n"
          << " f - Find employee\n"
          << " l - Show all\n"
          << " s - Go to storage\n\n"
-         << " e - End program\n"
-         << '\n';
+         << " e - End program\n\n";
 }
 
 

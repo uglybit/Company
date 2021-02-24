@@ -1,8 +1,6 @@
 #include "Company.h"
 #include "windows.h"
 
-//
-
 Company::Company()
 {
     storage = new Storage;
@@ -14,6 +12,7 @@ Company::~Company()
 {
     if (storage != nullptr) 
         delete storage;
+        
     for (auto a : all_workers )
         if (a != nullptr) 
             delete a;
@@ -21,7 +20,7 @@ Company::~Company()
 
 void Company::read_from_file()
 {
-    std::string p;
+    std::string employee_type;
     std::ifstream file_in(file_employee);
     if (!file_in)
     {
@@ -38,22 +37,22 @@ void Company::read_from_file()
 
     for (unsigned i = 0; i < all_workers_size; i++)
     {
-        Employee* tmp = nullptr;
+        Employee* new_employee = nullptr;
         file_in >> std::ws;
-        getline(file_in, p, '#');
+        getline(file_in, employee_type, '#');
 
-        if (p == "production worker")
-            tmp = new Production_worker(p);
-        if (p == "trader")
-            tmp = new Trader(p);
-        if (!tmp) // didnt find so tmp is still nullptr, end of program
+        if (employee_type == "production worker")
+            new_employee = new Production_worker(employee_type);
+        if (employee_type == "trader")
+            new_employee = new Trader(employee_type);
+        if (!new_employee) // didnt find so new_employee is still nullptr, end of program
         {
             std::cout << "Error while reading employee database\n"
                 << "didn't recognize occupation\n";
             return;
         }
 
-        all_workers.push_back(tmp); // tmp has proper value
+        all_workers.push_back(new_employee); // new_employee has proper value
         all_workers[i]->read_employee(file_in); // reading employee data
     }
 
@@ -70,13 +69,14 @@ void Company::read_from_file()
 
 
 void Company::add_new_employee()
-{
-    Employee* newEmployee = occupation_choosing(); // function returns nullptr or pointer
-    std::cout << "Adres Company::new employee: " << newEmployee << '\n';
+{                           
+    Employee* new_employee = occupation_choosing(); 
+                            // ^ function returns nullptr or pointer - allocates memory  
+    std::cout << "Adres Company::new employee: " << new_employee << '\n';
 
-    if (newEmployee != nullptr) { 
-         newEmployee->fill_employee_data();
-         all_workers.push_back(newEmployee);
+    if (new_employee != nullptr) { 
+         new_employee->fill_employee_data();
+         all_workers.push_back(new_employee);
          save_to_file(); // automatically saving
          current_employee = all_workers.size();
     }
@@ -89,18 +89,18 @@ void Company::add_new_employee()
 Employee* Company::occupation_choosing()
 {
     bool quit = false;
-    char choice;
+    char occupation;
 
-    std::cout << "\nChoose occupation:\n";
-    std::cout << " p - production worker \n"
+    std::cout << "\nChoose occupation:\n"
+         << " p - production worker \n"
          << " t - trader \n\n"
          << " m - Main menu\n";
 
     Employee* employee = nullptr;
 
-    std::cin >> choice;
+    std::cin >> occupation; // add validation
     do {
-        switch (choice)
+        switch (occupation)
         {
         case 'p': employee = new Production_worker(); break;
         case 't': employee = new Trader(); break;
@@ -168,33 +168,34 @@ void Company::find_employee()
 
 bool Company::search_by_surname()
 {
-    std::string s;
+    std::string surname;
     unsigned counter = 0; // counter for persons with the same name
     std::cout << "\nEnter surname: ";
     std::cin >> std::ws; // clearing white spaces
-    getline(std::cin, s, '\n');
+    getline(std::cin, surname, '\n');
 
     for (unsigned i = 0; i < all_workers.size(); i++)
     {
-        if (s == all_workers[i]->get_surname() ) // if there is matching name
+        if (surname == all_workers[i]->get_surname() ) // if there is matching name
         {
             all_workers[i]->show_personal_info(); // shows personal info with items
             ++counter; // increasnig matching name counter
             current_employee = i; // sets current employee
         }
     }
+    
     if (counter == 1) // only one person found, end of function
         return true;
 
     if ( counter == 0 )  { // no matching name
-        std::cout << "No match for: " << s << '\n' << '\n';
+        std::cout << "No match for: " << surname << '\n' << '\n';
         require_key();
         return false;
     }
 
     if ( counter > 1 ) // more then one surname match --> searching by id
     {
-        std::cout << "Matching surname: \"" << s << "\":  " << counter << '\n';
+        std::cout << "Matching surname: \"" << surname << "\":  " << counter << '\n';
 
         if (search_by_id()) // sets variable: current_employee and shows info if found
             return true;
@@ -206,21 +207,21 @@ bool Company::search_by_surname()
 
 bool Company::search_by_id() // function is invoking when find by surname found more than one person
 {
-    unsigned n;
+    unsigned id_number;
     std::cout << "\nChoose employee id: " << '\n';
     do
     {
-        std::cin >> n;
+        std::cin >> id_number;
         if ( data_validation("\nEmployee ID must be integer number!\n")) // wrong data
-            continue; //
-        else if (n < 1 || n > Employee::get_max_id_amount()) // if the chosen id is bigger than number of employee
+            continue; 
+        else if (id_number < 1 || id_number > Employee::get_max_id_amount()) // if the chosen id is bigger than number of employee
             std::cout << "Wrong id! Try again: ";
         else break; // evertyhing is ok - breaking loop
     }while(true);
 
     for (unsigned i = 0; i < all_workers.size(); i++)
     {
-        if ( n == all_workers[i]->get_employee_id() ) // if found employee id
+        if (id_number  == all_workers[i]->get_employee_id() ) // if found employee id
         {
             current_employee = i; 
             //system("cls");
@@ -229,15 +230,15 @@ bool Company::search_by_id() // function is invoking when find by surname found 
         }
     }
 
-    std::cout << "Did not find id: " << n << ". Check id and try again\n";
+    std::cout << "Did not find id: " << id_number << ". Check id and try again\n";
     return false;
 }
 
 
 // add resource from storage to employee
-void Company::give_resource(Employee* emp, Storage* s)
+void Company::give_resource(Employee* empl, Storage* stor)
 {
-    if (emp->get_resource(s)) {
+    if (empl->get_resource(stor)) {
         storage->save_all_resources();
     }
 }
@@ -246,7 +247,7 @@ void Company::give_resource(Employee* emp, Storage* s)
 void Company::employee_menu() // shows when serching function returned true
 {
     bool quit = false;
-    char choice;
+    char menu_option;
     do
     {
        // system("cls");
@@ -260,8 +261,8 @@ void Company::employee_menu() // shows when serching function returned true
              << "\nd - Delete employee\n"
              << "\nm - Main menu\n";
 
-        std::cin >> choice;
-         switch(choice)
+        std::cin >> menu_option;
+         switch(menu_option)
          {
              case 'a': give_resource(all_workers[current_employee], storage); break; // gives a tool or device from storage
              case 'r': all_workers[current_employee]->return_resource(storage); break; // returns resource to storage
@@ -307,9 +308,9 @@ void Company::remove_employee() // option delete employee from Company::menu_emp
 
 void Company::move_employee()
 {
-    Employee* e = occupation_choosing(); // returns new object or nullptr
+    Employee* employee = occupation_choosing(); // returns new object or nullptr
 
-    if (!e) // if there something gone wrong
+    if (!employee) // if there something gone wrong
     {
          std::cout << "Cannot move the employee\n";
          Sleep(3000);
@@ -327,15 +328,12 @@ void Company::move_employee()
         std::cout << "\nReturn all items to storage\n";
         all_workers[current_employee]->return_resource(storage);
     }
-    e->copy_basic_info(all_workers[current_employee]); // copy info then
+    employee->copy_basic_info(all_workers[current_employee]); // copy info then
     delete all_workers.at(current_employee); // deleting employee
 
-    iterator it = it_curr_emp();  // setting iterator
-    
-    
+    iterator it = it_curr_emp();  // setting iterator   
     all_workers.erase(it); // erase from vector
-    all_workers.push_back(e); // adding moving employee
-    
+    all_workers.push_back(employee); // adding moving employee
 
     current_employee = all_workers.size() -1; // setting current employee
 }
@@ -356,7 +354,7 @@ void Company::save_to_file()
     for (auto a : all_workers ) a->save_employee(file_out); // saving to file
 
     if (file_out) std::cout << "Employee database has been saved properly.\n";
-    file_out.close(); // closing file
+    file_out.close(); 
 /**    storage->save_all_resources(); // saving resources in another file */
     //Sleep(2000);
 }

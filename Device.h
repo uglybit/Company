@@ -3,6 +3,10 @@
 
 #include "Resources.h"
 
+/*
+  Device class represents tools thats only White_collar workers can posses.
+  Functions allow to: show info, read/save tool to file.
+*/
 
 class Device : public Resources
 {
@@ -13,11 +17,7 @@ public:
     explicit Device(int n) : Resources(n) {}
     ~Device() override { std::cout << "Destruktor Device: " << this << "\n"; }
 
-    Res_type recognize_type() const override
-    {
-        return Res_type::Tool;
-    }
-
+    Res_type recognize_type() const override { return Res_type::Tool; }
     void save_resource(std::ofstream& f_out) override;
     void read_from_file(std::ifstream& f_in) override;
     void show_info() override;

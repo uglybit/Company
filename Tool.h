@@ -5,14 +5,16 @@
 #include <ctime>
 
 /*
-  Class Tool represents tools that can possess only Blue_collar worker.
+  Tool class represents tools that only Blue_collar workers  can possess.
   Functions allow to: show info, read/save tool to file.
 */
 
 class Tool : public Resources
 {
+private:
     double tool_price;
     std::string next_inspection_date;
+    std::string next_test_date();
 public:
     Tool() : Resources() {}
     explicit Tool(std::string name, double price);
@@ -23,7 +25,6 @@ public:
     void save_resource(std::ofstream& f_out) override;
     void read_from_file(std::ifstream& f_in) override;
     void show_info() override;
-    std::string next_test_date();
 };
 
 #endif // TOOL_H

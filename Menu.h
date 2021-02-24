@@ -22,5 +22,4 @@ public:
     char menu_choice();
 };
 
-
 #endif // MENU_H

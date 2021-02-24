@@ -3,13 +3,18 @@
 
 #include "Employee.h"
 
+/*
+    class Blue_collar is abstract class for all blue collar workers
+*/
+
+
 class Blue_collar : public Employee 
 {
 protected:
     Blue_collar() : Employee() { nof_employee_tools = 0; } // for creating new employee by user
     explicit Blue_collar(std::string p) : Employee(p) {} // for reading from file
     ~Blue_collar() override {
-        /*for (auto a: employee_resources) delete a;*/  // BUG!!! 
+        /*for (auto a: employee_resources) delete a;*/  // bug
         std::cout << "destructor Blue_collar\n";
     }
 };
@@ -17,7 +22,7 @@ protected:
 
 class Production_worker final: public Blue_collar
 {
-protected:
+private:
     std::string brigade;
 public:
     Production_worker() : Blue_collar() { position = "production worker"; } // for creating new employee by user
@@ -30,7 +35,6 @@ public:
     void read_employee(std::ifstream& f_in) override;
     std::string get_additional_options() override;
     void set_additional_options() override;
-
-    Emp_type Employee_type() const override { return Emp_type::Production_worker; }
 };
+
 #endif

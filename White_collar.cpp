@@ -1,8 +1,5 @@
 #include "White_collar.h"
 
-
-
-// save Trader to file
 void Trader::save_employee(std::ofstream& f_out)
 {
     save_basic_info(f_out);
@@ -11,7 +8,6 @@ void Trader::save_employee(std::ofstream& f_out)
 }
 
 
-// read Trader form file
 void Trader::read_employee(std::ifstream& f_in) // override
 {
     read_basic_info(f_in);

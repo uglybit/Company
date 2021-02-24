@@ -1,10 +1,9 @@
 #include "Tool.h"
 
-
 Tool::Tool(std::string name, double price) : Resources(name)
 {
     tool_price = price;
-    next_inspection_date = next_test_date(); // sets date: one year form "now"
+    next_inspection_date = next_test_date(); // sets date: one year from "now"
 }
 
 
@@ -34,9 +33,11 @@ std::string Tool::next_test_date()
     struct tm new_time;
     time_t now = time(0);
     localtime_s(&new_time, &now);
+
     int year = 1901 + new_time.tm_year;
     int month = 1 + new_time.tm_mon;
     int day = new_time.tm_mday;
+    
     date = std::to_string(year) + '-' + 
            std::to_string(month) + '-' + 
            std::to_string(day);

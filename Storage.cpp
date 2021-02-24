@@ -2,7 +2,7 @@
 
 
 
-Storage::~Storage() // frees memory
+Storage::~Storage() 
 {
     for (auto a : devices_in_storage)
         if (a != nullptr)
@@ -14,11 +14,10 @@ Storage::~Storage() // frees memory
 }
 
 
-// storage menu
 void Storage::show_menu()
 {
     bool quit = false;
-    char choice;
+    char menu_option;
     do
     {
         //system("cls");
@@ -29,18 +28,18 @@ void Storage::show_menu()
              << " o - Add tool\n"
              << " m.   Main menu\n";
 
-        std::cin >> choice;
-         switch(choice)
-         {
+        std::cin >> menu_option;
+        switch(menu_option)
+        {
             case 'd': show_devices();
-                      require_key(); break;
+                        require_key(); break;
             case 't': show_tools();
-                      require_key(); break;
+                        require_key(); break;
             case 'v': add_new_device(); break;
             case 'o': add_new_tool(); break;
             case 'm': /*system("cls");*/ quit = true; break; // to main Menu
             default: std::cout << "Wrong commmand, try again" << '\n';
-         }
+        }
     }while(!quit);
 }
 
@@ -76,7 +75,6 @@ unsigned Storage::show_tools()
     }
 
     return quantity;
-    //
 }
 
 
@@ -84,6 +82,7 @@ unsigned Storage::show_tools()
 void Storage::save_all_resources()
 {
     std::ofstream f_out(data_file_name);
+
     if(!f_out)
     {
         std::cout << "Can not open file " << data_file_name << '\n';
@@ -105,24 +104,14 @@ void Storage::save_all_resources()
     }
 
     if (f_out) std::cout << "Storage database has been saved properly\n";
+
     f_out.close();
 }
 
 
-// reading all resources from file: tools and devices
-void Storage::read_all_resources()
+void Storage::read_all_devices(std::ifstream& f_in) 
 {
     unsigned size_devices;
-    unsigned size_tools;
-
-    std::ifstream f_in(data_file_name);
-
-    if(!f_in)
-    {
-        std::cout << "Can not open file " << data_file_name << '\n';
-        return;
-    }
-
     // reading devices
     f_in >> size_devices;
     //std::cout << "Size devices: " << size_devices << '\n'; // TEST
@@ -134,7 +123,11 @@ void Storage::read_all_resources()
         devices_in_storage.back()->read_from_file(f_in);
     }
     //std::cout << "Size of devices vector: " << devices_in_storage.size() << '\n'; // TEST
+}
 
+void Storage::read_all_tools(std::ifstream& f_in) 
+{
+    unsigned size_tools;
     //reading tools
     f_in >> size_tools;
     std::cout << "Size tools: " << size_tools << '\n';
@@ -147,7 +140,57 @@ void Storage::read_all_resources()
     }
 
     //std::cout << "Size of tools vector: " << tools_in_storage.size() << '\n'; // TEST
+}
 
+
+// reading all resources from file: tools and devices
+void Storage::read_all_resources() // todo: divide into 2 fnctions with file reference
+{
+    
+    
+    std::ifstream f_in(data_file_name);
+
+    if(!f_in)
+    {
+        std::cout << "Can not open file " << data_file_name << '\n';
+        return;
+    }
+/*
+    unsigned size_devices;
+ // 1 przeniesione do oddzielnej funkcji 
+    // reading devices
+    f_in >> size_devices;
+    //std::cout << "Size devices: " << size_devices << '\n'; // TEST
+
+    for (unsigned i = 0; i < size_devices; i++) 
+    {
+        devices_in_storage.push_back(new Device);
+       // std::cout << "Address Storage::new Device: " << devices_in_storage.back() << '\n'; // TEST
+        devices_in_storage.back()->read_from_file(f_in);
+    }
+    //std::cout << "Size of devices vector: " << devices_in_storage.size() << '\n'; // TEST
+// 1
+
+
+ // 2 przeniesione do oddzielnej funkcji 2
+    //reading tools
+    unsigned size_tools;
+
+    f_in >> size_tools;
+    std::cout << "Size tools: " << size_tools << '\n';
+
+    for (unsigned i = 0; i < size_tools; i++) 
+    {
+        tools_in_storage.push_back(new Tool);
+        //std::cout << "Address Storage::new Tool: " << tools_in_storage.back() << '\n'; // TEST
+        tools_in_storage.back()->read_from_file(f_in);
+    }
+
+    //std::cout << "Size of tools vector: " << tools_in_storage.size() << '\n'; // TEST
+// 2
+*/
+    read_all_devices(f_in);
+    read_all_tools(f_in);
     if (f_in)
         std::cout << "Storage database has been read properly\n";
     else
@@ -157,10 +200,10 @@ void Storage::read_all_resources()
 
 
 // transfer device from storage to White collar worker
-Resources* Storage::lease_device(unsigned nr) 
+Resources* Storage::lease_device(unsigned device_number) 
 {
     //std::cout << "Devices in storage size:" << devices_in_storage.size() << '\n';
-    if ((nr < 0) || (nr >= devices_in_storage.size() ) ) {
+    if ((device_number < 0) || (device_number >= devices_in_storage.size() ) ) {
         //std::cout <<"First nullptr w lease device\m";
         return nullptr;
     }
@@ -171,19 +214,19 @@ Resources* Storage::lease_device(unsigned nr)
     else
         return nullptr;
 
-    Resources *tmp = devices_in_storage[nr];
+    Resources *device = devices_in_storage[device_number];
 
-    auto it = devices_in_storage.begin() + nr;
-    //devices_in_storage[nr] = nullptr;
+    auto it = devices_in_storage.begin() + device_number;
+    //devices_in_storage[device_number] = nullptr;
     devices_in_storage.erase(it);
-    return tmp;
+    return device;
 }
 
  
 // transfer device from storage to Blue collar worker
-Resources* Storage::lease_tool(unsigned nr) 
+Resources* Storage::lease_tool(unsigned tool_number) 
 {
-    if ( (nr < 0) || (nr >= tools_in_storage.size()) )
+    if ((tool_number < 0) || (tool_number >= tools_in_storage.size()) )
         return nullptr;
 
     std::cout << "Save changes?";
@@ -191,28 +234,28 @@ Resources* Storage::lease_tool(unsigned nr)
         save_all_resources();
     else
         return nullptr;
-    Resources *tmp = tools_in_storage[nr];
+    Resources *tmp = tools_in_storage[tool_number];
 
-    auto it = tools_in_storage.begin() + nr;
-    //delete   tools_in_storage[nr];
-    //tools_in_storage[nr] = nullptr;
+    auto it = tools_in_storage.begin() + tool_number;
+    //delete   tools_in_storage[tool_number];
+    //tools_in_storage[tool_number] = nullptr;
     tools_in_storage.erase(it);
     return tmp;
 }
 
 
 // transfer resource from Blue/White collar worker
-bool Storage::take_resource(Resources* tmp)
+bool Storage::take_resource(Resources* resource)
 {
-    if (tmp == nullptr) return false;
+    if (resource == nullptr) return false;
 
-    switch (tmp->recognize_type())
+    switch (resource->recognize_type())
     {
     case Res_type::Resources: return false;
     case Res_type::Device:
-        devices_in_storage.push_back(tmp); break;
+        devices_in_storage.push_back(resource); break;
     case Res_type::Tool:
-        tools_in_storage.push_back(tmp); break;
+        tools_in_storage.push_back(resource); break;
     }
     return true;
 }
@@ -222,10 +265,11 @@ bool Storage::take_resource(Resources* tmp)
 void Storage::add_new_device()
 {
     // system("cls");
-    std::cout << "\n--> ADD DEVICE TO STORAGE\n";
     std::string name;
     std::string brand;
-    unsigned quantity;
+    unsigned int quantity;
+
+    std::cout << "\n--> ADD DEVICE TO STORAGE\n";
     std::cout << "Device name: ";
     std::cin >> name;
     std::cout << "Brand: ";
@@ -233,8 +277,10 @@ void Storage::add_new_device()
     std::cout << "Quantity: ";
     std::cin >> quantity;
 
+    std::cout << "przed petla\n";
     for (unsigned i = 0; i < quantity; i++)
     {
+        std::cout << "W petli\n";
         devices_in_storage.push_back(new Device(name, brand));
         std::cout << "Adres Storage::Add new Device: " << devices_in_storage.back() << '\n';
     }
@@ -245,14 +291,14 @@ void Storage::add_new_device()
 }
 
 
-// add new tool to storage
 void Storage::add_new_tool() 
 {
-   // system("cls");
-    std::cout << "\n--> ADD TOOL TO STORAGE\n";
+    // system("cls");
     std::string name;
     double price;
     unsigned quantity;
+   
+    std::cout << "\n--> ADD TOOL TO STORAGE\n";
     std::cout << "Tool name: ";
     std::cin >> name;
     std::cout << "Price: ";
@@ -270,5 +316,3 @@ void Storage::add_new_tool()
     if ( confirmation() )
         save_all_resources();
 }
-
-

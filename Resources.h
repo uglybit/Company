@@ -19,6 +19,12 @@ enum class Res_type
     Device
 };
 
+/*
+    class Resources is abstract class for 
+    devices assigned to white collar workers
+    and tools assigned to blue collar workers 
+*/
+
 
 class Resources
 {
@@ -33,8 +39,7 @@ public:
     explicit Resources(std::string name);
     virtual ~Resources() { std::cout << "Destr Resources\n"; resources_counter--; }
 
-    //This function allows to recognize type of Resource*  in derived class
-    virtual Res_type recognize_type() const{ return Res_type::Resources; }
+    virtual Res_type recognize_type() const { return Res_type::Resources; }
     virtual void save_resource(std::ofstream& f_out) = 0;
     virtual void read_from_file(std::ifstream& f_in) = 0;
     virtual void show_info() { std::cout << "pure resources show_info\n"; }

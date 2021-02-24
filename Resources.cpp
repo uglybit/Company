@@ -6,4 +6,3 @@ Resources::Resources(std::string name) : resource_name{name}
 {
     resource_id = ++resources_counter;
 }
-
