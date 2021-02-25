@@ -1,1 +1,0 @@
-g++ main.cpp Blue_collar.h Blue_collar.cpp Company.h Company.cpp Device.h Device.cpp Employee.h Employee.cpp Menu.h Menu.cpp Resources.h Resources.cpp Storage.h Storage.cpp Tool.h Tool.cpp White_collar.h White_collar.cpp
