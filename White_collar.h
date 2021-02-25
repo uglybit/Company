@@ -10,10 +10,9 @@
 class White_collar : public Employee
 {
 protected:
-
     explicit White_collar() : Employee() { nof_employee_tools = 0; }
     explicit White_collar(std::string p) : Employee(p) {} // for reading from file
-    ~White_collar() override {};
+    ~White_collar() override { std::cout << "Destr White collar\n"; }
 };
 
 

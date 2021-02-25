@@ -17,7 +17,7 @@ public:
     explicit Device(int n) : Resources(n) {}
     ~Device() override { std::cout << "Destruktor Device: " << this << "\n"; }
 
-    Res_type recognize_type() const override { return Res_type::Tool; }
+    Res_type recognize_type() const override { return Res_type::Device; }
     void save_resource(std::ofstream& f_out) override;
     void read_from_file(std::ifstream& f_in) override;
     void show_info() override;

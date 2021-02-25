@@ -1,7 +1,6 @@
 #include "Storage.h"
 
 
-
 Storage::~Storage() 
 {
     for (auto a : devices_in_storage)
@@ -26,7 +25,7 @@ void Storage::show_menu()
              << " t - Show tools\n"
              << " v - Add device\n"
              << " o - Add tool\n"
-             << " m.   Main menu\n";
+             << " m - Main menu\n";
 
         std::cin >> menu_option;
         switch(menu_option)
@@ -49,6 +48,7 @@ unsigned Storage::show_devices()
 {
     unsigned quantity = devices_in_storage.size();
     std::cout << '\n' << std::string(60 , '-') << '\n';
+    if (quantity == 0) std::cout << "\n<empty>\n";
 
     for (unsigned i = 0; i < quantity; i++)
     {
@@ -66,6 +66,7 @@ unsigned Storage::show_tools()
 {
     unsigned quantity = tools_in_storage.size();
     std::cout << '\n' << std::string(80 , '-') << '\n';
+    if (quantity == 0) std::cout << "\n<empty>\n";
 
     for (unsigned i = 0; i < quantity; i++)
     {
@@ -208,7 +209,7 @@ Resources* Storage::lease_device(unsigned device_number)
         return nullptr;
     }
 
-    std::cout << "Save changes?";
+    std::cout << "Save changes?\n";
     if (confirmation() )
         save_all_resources();
     else
@@ -229,7 +230,7 @@ Resources* Storage::lease_tool(unsigned tool_number)
     if ((tool_number < 0) || (tool_number >= tools_in_storage.size()) )
         return nullptr;
 
-    std::cout << "Save changes?";
+    std::cout << "Save changes?\n";
     if (confirmation() )
         save_all_resources();
     else
@@ -296,7 +297,7 @@ void Storage::add_new_tool()
     // system("cls");
     std::string name;
     double price;
-    unsigned quantity;
+    int quantity;
    
     std::cout << "\n--> ADD TOOL TO STORAGE\n";
     std::cout << "Tool name: ";
@@ -305,8 +306,9 @@ void Storage::add_new_tool()
     std::cin >> price;
     std::cout << "Quantity: ";
     std::cin >> quantity;
+    std::cout << "Wczytalo\n";
 
-    for (unsigned i = 0; i < quantity; i++)
+    for (int i = 0; i < quantity; i++)
     {
         tools_in_storage.push_back(new Tool(name, price));
         std::cout << "Adres Storage::new tool: " << tools_in_storage.back() << '\n';

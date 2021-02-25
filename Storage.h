@@ -20,6 +20,7 @@ private:
     std::vector<Resources*> devices_in_storage;
     std::vector<Resources*> tools_in_storage;
     std::string data_file_name = "storage_data.txt";
+    std::string separate_records() {}
  
 public:
     Storage() = default;

@@ -64,7 +64,6 @@ void Company::read_from_file()
     }
     file_in.close(); // closing file
     storage->read_all_resources(); // storage reading own data
-    //require_key();
 }
 
 
@@ -154,7 +153,7 @@ void Company::find_employee()
         {
             case '1': found = search_by_surname(); break;
             case '2': found = search_by_id(); break;
-            case 27 : quit = true;
+            case 'm' : quit = true;
         }
     }while(!found && !quit);
 
@@ -178,9 +177,8 @@ bool Company::search_by_surname()
     {
         if (surname == all_workers[i]->get_surname() ) // if there is matching name
         {
-            all_workers[i]->show_personal_info(); // shows personal info with items
-            ++counter; // increasnig matching name counter
-            current_employee = i; // sets current employee
+            ++counter; 
+            current_employee = i; 
         }
     }
     
@@ -196,7 +194,6 @@ bool Company::search_by_surname()
     if ( counter > 1 ) // more then one surname match --> searching by id
     {
         std::cout << "Matching surname: \"" << surname << "\":  " << counter << '\n';
-
         if (search_by_id()) // sets variable: current_employee and shows info if found
             return true;
         else
@@ -216,7 +213,7 @@ bool Company::search_by_id() // function is invoking when find by surname found 
             continue; 
         else if (id_number < 1 || id_number > Employee::get_max_id_amount()) // if the chosen id is bigger than number of employee
             std::cout << "Wrong id! Try again: ";
-        else break; // evertyhing is ok - breaking loop
+        else break; // validation ok - breaking loop
     }while(true);
 
     for (unsigned i = 0; i < all_workers.size(); i++)
@@ -225,7 +222,6 @@ bool Company::search_by_id() // function is invoking when find by surname found 
         {
             current_employee = i; 
             //system("cls");
-            all_workers[current_employee]->show_personal_info();
             return true;
         }
     }
@@ -240,11 +236,12 @@ void Company::give_resource(Employee* empl, Storage* stor)
 {
     if (empl->get_resource(stor)) {
         storage->save_all_resources();
+        save_to_file();
     }
 }
 
-
-void Company::employee_menu() // shows when serching function returned true
+// menu shows when serching function returned true
+void Company::employee_menu() 
 {
     bool quit = false;
     char menu_option;
@@ -265,26 +262,23 @@ void Company::employee_menu() // shows when serching function returned true
          switch(menu_option)
          {
              case 'a': give_resource(all_workers[current_employee], storage); break; // gives a tool or device from storage
-             case 'r': all_workers[current_employee]->return_resource(storage); break; // returns resource to storage
-             case 'e': all_workers[current_employee]->edit_personal_info(); break;
+             case 'r': if (all_workers[current_employee]->return_resource(storage)) 
+                         {
+                           save_to_file();
+                         } 
+                         break; 
+             case 'e': all_workers[current_employee]->edit_personal_info(); break; 
              case 'v': move_employee(); break;  // moves employee in another position
-             case 'd': remove_employee(); 
-             case 'm': quit = true;  // Esc
+             case 'd': remove_employee(); break;
+             case 'm': quit = true; break;
              default: std::cout << "Wrong command, try again\n";
          }
 
      }while(!quit);
-
-//     std::cout << "\nDo you want to save the changes?\n";
-//     if ( !confirmation()) return;
-
-     //system("cls");
-     save_to_file(); // automaticaly saving after changes OR NOT!! - NOT GOOD
-     require_key();
 }
 
 
-void Company::remove_employee() // option delete employee from Company::menu_employee 
+void Company::remove_employee() 
 {
     system("cls");
     std::cout << "Do you want to delete this employee?\n";
@@ -303,12 +297,13 @@ void Company::remove_employee() // option delete employee from Company::menu_emp
     delete all_workers.at(current_employee); // only frees memory - deleting address
     iterator i = it_curr_emp(); // sets iterator for current employee in container
     all_workers.erase(i); // deletes element from vector, decreasing size of vector
+    save_to_file();
 }
 
 
 void Company::move_employee()
 {
-    Employee* employee = occupation_choosing(); // returns new object or nullptr
+    Employee* employee = occupation_choosing(); // function returns new object or nullptr
 
     if (!employee) // if there something gone wrong
     {
@@ -321,7 +316,7 @@ void Company::move_employee()
     std::cout << "Do you want to move this employee?\n";
     all_workers[current_employee]->show_personal_info();
 
-    if ( !confirmation()) return; //user doesn't want to move employee
+    if (!confirmation()) return; //user doesn't want to move employee
 
     while(all_workers[current_employee]->get_number_of_itmes() > 0) // returning tools/devices
     {
@@ -336,6 +331,7 @@ void Company::move_employee()
     all_workers.push_back(employee); // adding moving employee
 
     current_employee = all_workers.size() -1; // setting current employee
+    save_to_file();
 }
 
 
@@ -355,8 +351,6 @@ void Company::save_to_file()
 
     if (file_out) std::cout << "Employee database has been saved properly.\n";
     file_out.close(); 
-/**    storage->save_all_resources(); // saving resources in another file */
-    //Sleep(2000);
 }
 
 

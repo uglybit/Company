@@ -10,6 +10,14 @@ Employee::Employee()
     ++employee_counter; // increasing number of employess - is not equal to employee_id
 }
 
+// for reading from file only
+Employee::Employee(std::string pos) : position{ pos }
+{
+    std::cout << "New employee from file: " << this << '\n';
+    ++employee_counter;
+} 
+
+
 Employee::~Employee() 
 {
     std::cout << "destructor Employee\n"; 
@@ -19,14 +27,6 @@ Employee::~Employee()
             delete a; 
     }
 }
-
-
-// for reading from file only
-Employee::Employee(std::string pos) : position{ pos }
-{
-    std::cout << "New employee from file: " << this << '\n';
-    ++employee_counter;
-} 
 
 
 int Employee::show_employee_resources() 
@@ -49,11 +49,11 @@ int Employee::show_employee_resources()
 
 
 // return employee resource to storage
-void Employee::return_resource(Storage* storage)
+bool Employee::return_resource(Storage* storage)
 {
     int quantity = show_employee_resources(); // virtual
     if (quantity <= 0) {
-        return;
+        return false;
     }
     std::cout << "Choose number: ";
 
@@ -74,6 +74,7 @@ void Employee::return_resource(Storage* storage)
         nof_employee_tools--;
         storage->save_all_resources();
     }
+    return resource_returned;
 }
 
 
@@ -98,7 +99,7 @@ bool Employee::get_resource(Storage* storage)
     if (resources_on_storage == 0) { // if storage is empty
         return false;
     }
-    std::cout << "Choose number";
+    std::cout << "Choose number: ";
 
     do {
         std::cin >> resource_number; // add validation 
@@ -152,7 +153,7 @@ void Employee::edit_personal_info()
 
         int array_index = position_to_edit -1;
         if ( array_index > 6 || array_index < 0 )  
-            break; 
+            return; 
 
         std::cout << edition[array_index] << " edition: "; //
         std::cin >> std::ws;

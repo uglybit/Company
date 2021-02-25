@@ -50,7 +50,7 @@ public:
     std::string get_surname() { return surname; }
     int show_employee_resources();
     bool get_resource(Storage* s);
-    void return_resource(Storage* s);
+    bool return_resource(Storage* s);
 
     // manage employee
     void fill_employee_data();

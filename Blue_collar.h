@@ -13,10 +13,7 @@ class Blue_collar : public Employee
 protected:
     Blue_collar() : Employee() { nof_employee_tools = 0; } // for creating new employee by user
     explicit Blue_collar(std::string p) : Employee(p) {} // for reading from file
-    ~Blue_collar() override {
-        /*for (auto a: employee_resources) delete a;*/  // bug
-        std::cout << "destructor Blue_collar\n";
-    }
+    ~Blue_collar() override { std::cout << "destructor Blue_collar\n"; }
 };
 
 

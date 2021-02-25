@@ -1,4 +1,6 @@
-1
 2
+3
 trader#2 Joe#Doe#01.02.1970#02.03.2008#Slinska 27#554789351#2000 
+	0
+production worker#3 seba#sam#11#2#lala#9999#3000 4 
 	0
