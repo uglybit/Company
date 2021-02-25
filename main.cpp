@@ -44,6 +44,7 @@ bool confirmation()
         c = getchar();
     } while (!(c == 'y' || c == 'n'));
 
+    // return (c == 'y');
     if (c == 'y') return true;
     else return false;
 }

@@ -42,19 +42,24 @@ void Storage::show_menu()
     }while(!quit);
 }
 
+void Storage::separate_records() 
+{
+    std::cout << '\n' << std::string(80 , '-') << '\n';
+}
+
 
 // show devices (only for white collar)
 unsigned Storage::show_devices()
 {
     unsigned quantity = devices_in_storage.size();
-    std::cout << '\n' << std::string(60 , '-') << '\n';
+    separate_records();
     if (quantity == 0) std::cout << "\n<empty>\n";
 
     for (unsigned i = 0; i < quantity; i++)
     {
         std::cout << i + 1 << ". ";
         devices_in_storage[i]->show_info();
-        std::cout << std::string(60 , '-') << '\n';
+        separate_records();
     }
 
     return quantity;
@@ -65,14 +70,14 @@ unsigned Storage::show_devices()
 unsigned Storage::show_tools()
 {
     unsigned quantity = tools_in_storage.size();
-    std::cout << '\n' << std::string(80 , '-') << '\n';
+    separate_records();
     if (quantity == 0) std::cout << "\n<empty>\n";
 
     for (unsigned i = 0; i < quantity; i++)
     {
         std::cout << i + 1 << ". ";
         tools_in_storage[i]->show_info();
-        std::cout << std::string(80 , '-') << '\n';
+        separate_records();
     }
 
     return quantity;
@@ -110,45 +115,9 @@ void Storage::save_all_resources()
 }
 
 
-void Storage::read_all_devices(std::ifstream& f_in) 
-{
-    unsigned size_devices;
-    // reading devices
-    f_in >> size_devices;
-    //std::cout << "Size devices: " << size_devices << '\n'; // TEST
-
-    for (unsigned i = 0; i < size_devices; i++) 
-    {
-        devices_in_storage.push_back(new Device);
-       // std::cout << "Address Storage::new Device: " << devices_in_storage.back() << '\n'; // TEST
-        devices_in_storage.back()->read_from_file(f_in);
-    }
-    //std::cout << "Size of devices vector: " << devices_in_storage.size() << '\n'; // TEST
-}
-
-void Storage::read_all_tools(std::ifstream& f_in) 
-{
-    unsigned size_tools;
-    //reading tools
-    f_in >> size_tools;
-    std::cout << "Size tools: " << size_tools << '\n';
-
-    for (unsigned i = 0; i < size_tools; i++) 
-    {
-        tools_in_storage.push_back(new Tool);
-        //std::cout << "Address Storage::new Tool: " << tools_in_storage.back() << '\n'; // TEST
-        tools_in_storage.back()->read_from_file(f_in);
-    }
-
-    //std::cout << "Size of tools vector: " << tools_in_storage.size() << '\n'; // TEST
-}
-
-
 // reading all resources from file: tools and devices
-void Storage::read_all_resources() // todo: divide into 2 fnctions with file reference
+void Storage::read_all_resources() 
 {
-    
-    
     std::ifstream f_in(data_file_name);
 
     if(!f_in)
@@ -156,40 +125,7 @@ void Storage::read_all_resources() // todo: divide into 2 fnctions with file ref
         std::cout << "Can not open file " << data_file_name << '\n';
         return;
     }
-/*
-    unsigned size_devices;
- // 1 przeniesione do oddzielnej funkcji 
-    // reading devices
-    f_in >> size_devices;
-    //std::cout << "Size devices: " << size_devices << '\n'; // TEST
 
-    for (unsigned i = 0; i < size_devices; i++) 
-    {
-        devices_in_storage.push_back(new Device);
-       // std::cout << "Address Storage::new Device: " << devices_in_storage.back() << '\n'; // TEST
-        devices_in_storage.back()->read_from_file(f_in);
-    }
-    //std::cout << "Size of devices vector: " << devices_in_storage.size() << '\n'; // TEST
-// 1
-
-
- // 2 przeniesione do oddzielnej funkcji 2
-    //reading tools
-    unsigned size_tools;
-
-    f_in >> size_tools;
-    std::cout << "Size tools: " << size_tools << '\n';
-
-    for (unsigned i = 0; i < size_tools; i++) 
-    {
-        tools_in_storage.push_back(new Tool);
-        //std::cout << "Address Storage::new Tool: " << tools_in_storage.back() << '\n'; // TEST
-        tools_in_storage.back()->read_from_file(f_in);
-    }
-
-    //std::cout << "Size of tools vector: " << tools_in_storage.size() << '\n'; // TEST
-// 2
-*/
     read_all_devices(f_in);
     read_all_tools(f_in);
     if (f_in)
@@ -197,6 +133,33 @@ void Storage::read_all_resources() // todo: divide into 2 fnctions with file ref
     else
         std::cout << "Error while reading storage database.\n";
     f_in.close();
+}
+
+
+void Storage::read_all_devices(std::ifstream& f_in) 
+{
+    unsigned size_devices;
+    f_in >> size_devices;
+
+    for (unsigned i = 0; i < size_devices; i++) 
+    {
+        devices_in_storage.push_back(new Device);
+        devices_in_storage.back()->read_from_file(f_in);
+    }
+}
+
+
+void Storage::read_all_tools(std::ifstream& f_in) 
+{
+    unsigned size_tools;
+    f_in >> size_tools;
+    std::cout << "Size tools: " << size_tools << '\n';
+
+    for (unsigned i = 0; i < size_tools; i++) 
+    {
+        tools_in_storage.push_back(new Tool);
+        tools_in_storage.back()->read_from_file(f_in);
+    }
 }
 
 
