@@ -1,5 +1,4 @@
 #include "Company.h"
-#include "windows.h"
 
 Company::Company()
 {
@@ -308,7 +307,7 @@ void Company::move_employee()
     if (!employee) // if there something gone wrong
     {
          std::cout << "Cannot move the employee\n";
-         Sleep(3000);
+         std::cin.get();
          return;
     }
 

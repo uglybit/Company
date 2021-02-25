@@ -27,19 +27,18 @@ void Tool::show_info()
 }
 
 
-std::string Tool::next_test_date() 
+std::string Tool::next_test_date()
 {
-    std::string date;
-    struct tm new_time;
-    time_t now = time(0);
-    localtime_s(&new_time, &now);
+    std::time_t now = std::time(nullptr);
+    std::string time_now = std::asctime(std::localtime(&now));
 
-    int year = 1901 + new_time.tm_year;
-    int month = 1 + new_time.tm_mon;
-    int day = new_time.tm_mday;
-    
-    date = std::to_string(year) + '-' + 
-           std::to_string(month) + '-' + 
-           std::to_string(day);
+    auto _year = std::localtime(&now)->tm_year + 1900;
+    auto _month = std::localtime(&now)->tm_mon;
+    auto _day = std::localtime(&now)->tm_mday;
+
+    std::string date =
+        std::to_string(_year) + "-" +
+        std::to_string(_month) + "-" +
+        std::to_string(_day);
     return date;
 }
